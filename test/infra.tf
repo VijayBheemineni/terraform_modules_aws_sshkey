@@ -13,8 +13,8 @@ provider "aws" {
 }
 
 module "sshkey" {
-  #   source = "git::https://github.com/VijayBheemineni/terraform_modules_aws_vpc.git?ref=v0.1.0"
-  source                = "../../terraform_modules_aws_sshkey"
+  source = "git@github.com:VijayBheemineni/terraform_modules_aws_sshkey.git?ref=v0.1.0"
+  # source                = "../../terraform_modules_aws_sshkey"
   tags                  = var.tags
   sshkey_config         = var.sshkey_config
   secretsmanager_config = var.secretsmanager_config

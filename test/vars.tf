@@ -10,9 +10,14 @@ variable "sshkey_config" {
   default = {
     algorithm = "rsa"
     bits      = 2048
-    # Uncomment below line if you want local ssh files to be deleted.
+    /* If you do not want local ssh files to be deleted, uncomment below line
+      and set value to 'false'. By default SSH files are deleted from local
+      file system */
     # destroy_local_ssh_files = true # Optional
-    # Uncomment below line if you want to create ssh files at different location
+    /* By default SSH files are created at '~/terraform_aws_ssh_keys/.keys'.
+    Uncomment below line and pass different folder if you want to change the default
+    location.
+    */
     # local_sshkeys_folder = "~/terraform_aws_ssh_keys/.keys" # Optional
   }
 }
