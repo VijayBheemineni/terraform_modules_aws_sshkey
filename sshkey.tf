@@ -50,9 +50,14 @@ resource "aws_key_pair" "sshkey" {
 }
 
 resource "null_resource" "ssh-keygen-delete" {
+  triggers = {
+    filename     = "${local.sshkey_file}"
+    filename_pub = "${local.sshkey_file}.pub"
+  }
   count = local.sshkey_config.destroy_local_ssh_files ? 1 : 0
   provisioner "local-exec" {
-    command = "rm -f ${local.sshkey_file};rm -f ${local.sshkey_file}.pub;touch ${local.sshkey_file} ${local.sshkey_file}.pub"
+    command = "rm -f ${self.triggers.filename};rm -f ${self.triggers.filename_pub};"
+    when    = destroy
   }
   depends_on = [
     aws_secretsmanager_secret_version.sshkey_value,
