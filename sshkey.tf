@@ -8,7 +8,7 @@ resource "local_file" "sshkey_public" {
 
 resource "null_resource" "ssh-keygen" {
   provisioner "local-exec" {
-    command = "ssh-keygen -t ${var.sshkey_config.algorithm} -b ${var.sshkey_config.bits} -C ${var.tags.name} -f ${local.sshkey_file} -q -N '' -m pem <<< y"
+    command = "ssh-keygen -t ${var.sshkey_config.algorithm} -b ${var.sshkey_config.bits} -C ${var.tags.name} -f ${local.sshkey_file} -q -N '' -m pem <<< y;chmod 400 ${local.sshkey_file}"
   }
   depends_on = [
     resource.local_file.sshkey
@@ -49,12 +49,15 @@ resource "aws_key_pair" "sshkey" {
   public_key = data.local_file.sshkey_public.content
 }
 
+/*
+  Below block destroys local ssh key files when infrastructure is destroyed.
+*/
 resource "null_resource" "ssh-keygen-delete" {
   triggers = {
     filename     = "${local.sshkey_file}"
     filename_pub = "${local.sshkey_file}.pub"
   }
-  count = local.sshkey_config.destroy_local_ssh_files ? 1 : 0
+  # count = local.sshkey_config.destroy_local_ssh_files ? 1 : 0
   provisioner "local-exec" {
     command = "rm -f ${self.triggers.filename};rm -f ${self.triggers.filename_pub};"
     when    = destroy

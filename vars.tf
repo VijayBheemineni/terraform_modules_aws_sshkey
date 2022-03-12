@@ -26,10 +26,10 @@ locals {
   # sshkey_folder = pathexpand("~/terraform_aws_ssh_keys/.keys")
   sshkey_file = "${local.sshkey_folder}/${var.tags.name}"
   default_sshkey_config = {
-    algorithm               = "rsa"
-    bits                    = 2048
-    destroy_local_ssh_files = true
-    local_sshkeys_folder    = "~/terraform_aws_ssh_keys/.keys"
+    algorithm = "rsa"
+    bits      = 2048
+    # destroy_local_ssh_files = true
+    local_sshkeys_folder = "~/terraform_aws_ssh_keys/.keys"
   }
   sshkey_config = merge(
     local.default_sshkey_config,
